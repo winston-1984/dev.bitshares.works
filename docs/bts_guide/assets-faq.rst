@@ -16,6 +16,7 @@ The following parameters can be changed after creation:
 
 * Issuer
 * UIA-Options:
+
 	* Max Supply
 	* Market Fee
 	* Permissions (disable only/nor re-enable)
@@ -25,6 +26,7 @@ The following parameters can be changed after creation:
 	* Description
 
 * MPG-Options:
+
 	* Feed Life Time
 	* Minimum Feeds
 	* Force Settlement Offset/Delay/Volume
@@ -134,10 +136,17 @@ Market Fees
 What are Asset Flags and Permissions?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-When an asset is creatd, the issuer can set any combination of
-flags/permissions. **Flags** are set in stone unless there is
-**permission** to edit. Once a permission to edit is revoked, flags are
-permanent, and can never be modified again.
+When an asset is created, the issuer can set any combination of
+flags/permissions. 
+
+**Permissions** give you the right to edit Flags 
+
+**Flags** allow you to enable or disable asset features
+
+Permissions are permanent one way switches.  Once a Permission to 
+edit a Flag is renounced by the issuer, the Flag setting(s) 
+under it remain but but can never be modified again.  As such, 
+Permissions should be given due consideration prior to disabling.
 
 .. _asset-faq10:
 
@@ -146,7 +155,9 @@ What are the Flags?
 
 * ``charge_market_fee``:
   an issuer-specified percentage of all market trades in this asset is
-  paid to the issuer
+  paid to the issuer.  When set, charge_market_fee allows the issuer to
+  charge a Taker fee if an order is filled immediately, or a Maker fee 
+  when the order is **NOT** filled immediately.  
 * ``white_list``:
   accounts must be white-listed in order to hold this asset
 * ``override_authority``:
@@ -183,31 +194,74 @@ What are the Permissions?
 What happens if I enable Market fees?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-If *Market Fees* of a UIA are turned on, fees have to be payed for each
-**market transaction**. This means, that market fees only apply to
-**filled orders**!
+Market fees allow an asset issuer to charge a variable transaction fee 
+based on the size of the transaction.  
+
+If *Market Fees* Flag of a UIA is turned on, 
+fees have to be payed for each **market transaction**. 
+This means, that market fees only apply to **filled orders**!
 
 The percentage of market fees that are applied can be defined and
-changed by the issuer and any fee generated that way will be accumulated
-for each asset only to be claimed by the issuer.
+changed by the issuer.  The issuer may charge a different fee depending on 
+if the user is a Maker or Taker.
 
-If the Market Fee is set to 1%, the issuer will earn 1% of market volume
-as profit. These profits are accumulated for each UIA and can be
-withdrawn by the issuer.
+A "Maker" adds a limit order onto the orderbooks by making an offer
+
+A "Taker" is one who removes a Maker's order from the orderbooks by filling it
+
+If the Maker Fee is set to 0.1%, the issuer will earn 0.1% of market volume
+as profit when the Maker leaves an order on the orderbooks, if that order
+is later filled by a Taker. 
+
+If the Taker Fee is set to 0.2%, the issuer will earn 0.2% of market volume
+as profit when the Taker takes a Maker's order off the orderbooks. 
+
+For a simple Market Fee, an asset issuer may set Maker and Taker fees to match; 
+charging both parties equally.  By treating the fees seperately, an asset 
+issuer can choose to require a larger Taker than Maker fee to incentivize
+populating the orderbook with liquidity.  
+
+Prior to BSIP81 there was only one Market Fee.  At the transition both Maker 
+and Taker fees for all existing assets were set to the previous Market Fee.
+In core at BSIP81, the maker fee object keeps the lineage of the market fee and 
+the taker fee is a new object which shows zero fee on each transaction
+until after the hard fork.  
+
+The profits accumulated by market fess for each UIA and can be withdrawn 
+by the issuer.
+
+NOTE: Graphene precision for percentage is in hundredths of a percent;
+100% is expressed as ten thousand (10000). the Reference UI includes the 
+translation to traditional percent format. 
 
 .. _asset-faq13:
 
-What if two different market fees are involved in a trade?
+How are market fees accounted in a trade?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Suppose, I set the market fee for MyUIA market at 0.1%.
-and the market fee for YourUIA market at 0.3%.
+In BitShares, you pay a fee upon **receiving an asset**, suppose:
 
-In BitShares, You pay the fee upon **receiving an asset**. Hence, one
-side will pay 0.3% the other will pay 0.1%.
+bob, owner of bob_UIA sets:
 
+    Maker fee for bob_UIA market at 0.1%
+    Taker fee for bob_UIA market at 0.2%
+    
+alice, owner of alice_UIA set:
 
+    Maker fee for alice_UIA market at 0.3%
+    Taker fee for alice_UIA market at 0.4%
 
+charlie places a limit order to buy `bob_UIA` with `alice_UIA` onto the book.
+
+daniel, fills charlie's order by selling `bob_UIA` to receive alice_UIA.
+
+charlie is a `bob_UIA:alice_UIA` market Maker
+    charlie receives `bob_UIA`
+	charlie pays bob 0.1% Maker Fee
+
+daniel is a Taker in the `bob_UIA:alice_UIA` market
+    daniel receives `alice_UIA`
+	daniel pays alice 0.4% Taker Fee
 
 ---------  
    
@@ -220,7 +274,7 @@ Market Pegged Assets
 Can I use the same flags/permissions as for UIAs?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Yes!
+Yes! However MPA's introduce additional issuer options. 
 
 .. _asset-faq15:
 
@@ -229,20 +283,32 @@ What are market-pegged-asset-specific parameters?
 
 * ``feed_lifetime_sec``:
   The lifetime of a feed. After this time (in seconds) a feed is no
-  longer considered *valid*.
+  longer considered *valid*.  The final feed price is the median 
+  of all valid feed submitted by producers
 * ``minimum_feeds``:
   The number of feeds required for a market to become (and stay) active.
+* ``disable force settling``:
+  An asset issuer may choose to disallow an asset owner from having the power 
+  to compel an asset borrower to settle a margin position.
 * ``force_settlement_delay_sec``:
   The delay between requesting a settlement and actual execution of
   settlement (in seconds)
 * ``force_settlement_offset_percent``:
-  A percentage offset from the price feed for settlement (`100% = 10000`)
+  A percentage offset from the price feed for settlement (`100% = 10000 graphene`)
 * ``maximum_force_settlement_volume``:
-  Maximum percentage of the supply that can be settled per day (`100% = 10000`)
+  Maximum percentage of the supply that can be settled per day (`100% = 10000 graphene`)
 * ``short_backing_asset``:
   The asset that has to be used to *back* this asset (when borrowing)
+* ``whitelist feed producers``:
+   The asset issuer must manually whitelist feed producers in a list by user_id.
+* ``allow witness or committee to feed``:
+   In addition to manually whitelisted producers the issuer may choose to 
+   allow witnesses or committe members, each as a group, to be feed producers.
+* ``allow asset owner to force global settlement``:
+   This permission effectively allows the issuer to margin call every 
+   borrower.  Even if this Permission is renounced, the same power can be had
+   through publishing a high maintenance collateral ratio.
 
-  
 ---------------------
 
 |  
