@@ -271,11 +271,15 @@ charlie places a limit order to buy `bob_UIA` with `alice_UIA` onto the book.
 daniel, fills charlie's order by selling `bob_UIA` to `receive alice_UIA`.
 
   * charlie is a `bob_UIA:alice_UIA` market Maker
+  
   * charlie receives `bob_UIA`
+  
     * charlie pays bob 0.1% Maker Fee
 
   * daniel is a Taker in the `bob_UIA:alice_UIA` market
+  
   * daniel receives `alice_UIA`
+  
     * daniel pays alice 0.4% Taker Fee
 
 
