@@ -42,6 +42,7 @@ The following parameters can be changed after creation:
 * MPA Feed Producers Options:
 
   * Price Feed
+  
 	* Core Exchange Rate (CER)
 	* Maximum Short Squeeze Ratio (MSSR)
 	* Maintenance Collateral Ratio (MCR)
@@ -301,37 +302,38 @@ What are market-pegged-asset-specific parameters?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 * ``feed_lifetime_sec``:
-  The lifetime of a feed.  After this time (in seconds) a feed is no
-  longer considered *valid*.  The final feed price is the median 
-  of all valid feeds submitted by the price feed producer oracles.
+	The lifetime of a feed.  After this time (in seconds) a feed is no
+	longer considered *valid*.  The final feed price is the median 
+	of all valid feeds submitted by the price feed producer oracles.
 * ``minimum_feeds``:
-  The number of feeds required for a market to become (and stay) active.
+	The number of feeds required for a market to become (and stay) active.
 * ``force settling``:
-	* ``disable``:
-		An asset issuer may choose to disallow an asset owner from having the power 
-		to compel an asset borrower to settle a margin position at feed price.
-	* ``delay seconds``:
-		The delay between requesting a settlement and actual execution of
-		settlement (in seconds).
-	* ``percent offset``: 	`100% = 10000 graphene`
-		Percentage offset from the price feed for settlement favoring the borrower. 
-	* ``maximum volume``:   `100% = 10000 graphene`
-	  Maximum percentage of the asset supply that can be settled daily 
+
+* ``disable``:
+	An asset issuer may choose to disallow an asset owner from having the power 
+	to compel an asset borrower to settle a margin position at feed price.
+* ``delay seconds``:
+	The delay between requesting a settlement and actual execution of
+	settlement (in seconds).
+* ``percent offset``: 	`100% = 10000 graphene`
+	Percentage offset from the price feed for settlement favoring the borrower. 
+* ``maximum volume``:   `100% = 10000 graphene`
+	Maximum percentage of the asset supply that can be settled daily 
 * ``allow asset owner to force global settlement``:
-  This permission effectively allows the issuer to margin call every 
-  borrower.  Even if this Permission is renounced, the same power can be had
-  through publishing a high maintenance collateral ratio or erroneous price.		
+	This permission effectively allows the issuer to margin call every 
+	borrower.  Even if this Permission is renounced, the same power can be had
+	through publishing a high maintenance collateral ratio or erroneous price.		
 * ``short backing asset``:
-  The asset that must be used as collateral to *back* this asset (when borrowing)
+	The asset that must be used as collateral to *back* this asset (when borrowing)
 * ``margin call fee ratio(MCFR)``:
-  The issuer may declare a MCFR to collect a fee from margin calls of his asset. 
-  Margin call order price limit is: `settlement_price / ( MSSR - MCFR )`
-  Upon settlement of a margin call, the issuer collects: 
-  `( amount_settled * MCFR ) / settlement_price` 
+	The issuer may declare a MCFR to collect a fee from margin calls of his asset. 
+	Margin call order price limit is: `settlement_price / ( MSSR - MCFR )`
+Upon settlement of a margin call, the issuer collects: 
+`( amount_settled * MCFR ) / settlement_price` 
 * ``whitelist feed producers``:
-  The asset issuer must manually whitelist feed producers in a list by user_id.
-  These feed producers are the oracles which gather data and upload it to the blockchain.
-  The feed producer's median price is used in all margin contracts for smartcoin.
+	The asset issuer must manually whitelist feed producers in a list by user_id.
+	These feed producers are the oracles which gather data and upload it to the blockchain.
+	The feed producer's median price is used in all margin contracts for smartcoin.
 * ``allow witness or committee to feed``:
 	In addition to manually whitelisted producers the issuer may choose to 
 	allow all witnesses or all committe members, each as a group, to be feed producers.   
@@ -340,21 +342,21 @@ What are market-pegged-asset-specific parameters?
 	The feed producer publishes 4 rates to the blockchain for each MPA, the median of 
 	these price feeds is the oracle which enforces the outcome of margin loans: 
 	* ``price feed (FEED)``:
-			Each feed producer, assigned by the asset issuer, may publish a price feed.  The 
-			feed represents the price of the MPA, relative to its short backing asset.  Each
-			feed producer is tasked with gathering real world market data, normalizing it, 
-			in some instances applying a cross rate, and then regularly uploading it to 
-			the blockchain. 
+		Each feed producer, assigned by the asset issuer, may publish a price feed.  The 
+		feed represents the price of the MPA, relative to its short backing asset.  Each
+		feed producer is tasked with gathering real world market data, normalizing it, 
+		in some instances applying a cross rate, and then regularly uploading it to 
+		the blockchain. 
 	* ``core exchange rate (CER)``:
-			Fees are by default paid in BTS. However, the user may opt to pay their fee in 
-			smartcoin terms. When paying these fees in terms other than BTS the user is 
-			subject to a fee of:  `CER * FEED * BTS_DUE`.
+		Fees are by default paid in BTS. However, the user may opt to pay their fee in 
+		smartcoin terms. When paying these fees in terms other than BTS the user is 
+		subject to a fee of:  `CER * FEED * BTS_DUE`.
 	* ``maximum short squeeze ratio (MSSR)``:
-			When a call order is liquidated, it is subject to be discounted at `1 / MSSR` 
-			below the settlement price, when placed on the order book. 
+		When a call order is liquidated, it is subject to be discounted at `1 / MSSR` 
+		below the settlement price, when placed on the order book. 
 	* ``Maintenance Collateral Ratio (MCR)``:
-			When you take a loan, the blockchain periodically tests that you have enough
-			collateral, given the current:  `MCR * FEED * YOUR_DEBT`.
+		When you take a loan, the blockchain periodically tests that you have enough
+		collateral, given the current:  `MCR * FEED * YOUR_DEBT`.
    
 
 ---------------------
