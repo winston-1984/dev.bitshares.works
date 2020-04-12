@@ -254,7 +254,9 @@ translation to traditional percent format.
 What happens when assets have different fees?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-In BitShares, you pay a fee upon **receiving an asset**,  suppose:
+In BitShares, you pay a fee upon **receiving an asset**.
+
+**Scenario:**
 
 bob, owner of `bob_UIA` sets:
 
@@ -269,6 +271,8 @@ alice, owner of `alice_UIA` sets:
 charlie places a limit order to buy `bob_UIA` with `alice_UIA` onto the book.
 
 daniel, fills charlie's order by selling `bob_UIA` to `receive alice_UIA`.
+
+**Outcome:**
 
   * charlie is a `bob_UIA:alice_UIA` market Maker
   
