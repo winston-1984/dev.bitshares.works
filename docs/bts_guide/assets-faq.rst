@@ -16,7 +16,7 @@ The following parameters can be changed after creation:
 
 * Issuer
 
-  * Issuance of a UIA or MPA can be transferred to another user.
+    * Issuance of a UIA or MPA can be transferred to another user.
 
 * User Issued Asset (UIA) Options:
 
@@ -41,8 +41,7 @@ The following parameters can be changed after creation:
     
 * MPA Feed Producers Options:
 
-  * Price Feed
-  
+    * Price Feed
     * Core Exchange Rate (CER)
     * Maximum Short Squeeze Ratio (MSSR)
     * Maintenance Collateral Ratio (MCR)
@@ -174,31 +173,22 @@ Permissions should be given due consideration prior to disabling.
 What are the Flags?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-* ``charge_market_fee``:
+* `charge_market_fee`
   an issuer-specified percentage of all market trades in this asset is
   paid to the issuer.  When set, charge_market_fee allows the issuer to
   charge a Taker fee if an order is filled immediately, or a Maker fee 
   when the order is **NOT** filled immediately.  
-* ``white_list``:
+* `white_list`
   accounts must be white-listed in order to hold this asset
-* ``override_authority``:
+* `override_authority`
   issuer may transfer asset back to himself
-* ``transfer_restricted``:
+* `transfer_restricted`
   require the issuer to be one party to every transfer
-* ``disable_force_settle``:
+* `disable_force_settle`
   disable force settling
-* ``global_settle``: (only for bitassets)
-  allows bitasset issuer to force a global settling - this may be set
-  in permissions, but should not be set as flag unless, for instance, a
-  prediction market has to be resolved. If this flag has been enabled,
-  no further shares can be borrowed!
-* ``disable_confidential``:
-  allow the asset to be used with confidential transactions
-* ``witness_fed_asset``:
-  allow the asset to be fed by witnesses
-* ``committee_fed_asset``:
-  allow the asset to be fed by the committee
-
+* `disable_confidential`
+  allow the asset to be used with confidential transactions  
+  
  .. _asset-faq11:
  
 What are the Permissions?
@@ -308,7 +298,6 @@ What are market-pegged-asset-specific parameters?
 * ``minimum_feeds``:
     The number of feeds required for a market to become (and stay) active.
 * ``force settling``:
-
     * ``disable``:
         An asset issuer may choose to disallow an asset owner from having the power 
         to compel an asset borrower to settle a margin position at feed price.
@@ -322,7 +311,8 @@ What are market-pegged-asset-specific parameters?
 * ``allow asset owner to force global settlement``:
     This permission effectively allows the issuer to margin call every 
     borrower.  Even if this Permission is renounced, the same power can be had
-    through publishing a high maintenance collateral ratio or erroneous price.      
+    through publishing a high maintenance collateral ratio or erroneous price.  
+    If this flag has been enabled, no further shares can be borrowed!
 * ``short backing asset``:
     The asset that must be used as collateral to *back* this asset (when borrowing)
 * ``margin call fee ratio(MCFR)``:
