@@ -9,14 +9,25 @@ Assets - FAQ
 
 .. _asset-faq1:
 
-Can I change `x` after creation of the asset
+Can I change `x` after creation of the asset?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The following parameters can be changed after creation:
 
 * Issuer
-
-    * Issuance of a UIA or MPA can be transferred to another user.
+     
+      There is one Issuer for each UIA or MPA, which controls access to the asset
+      permissions. The UIA Issuer owns the fee revenue of the UIA asset and the sole power to issue
+      new UIA Assets to UIA Holders.
+      
+      The MPA Issuer owns the fee revenue of the MPA.  However, unlike a UIA Issuer, 
+      the MPA Issuer cannot issue shares of MPA's.  MPA's must be borrowed into existance 
+      through call orders, by MPA Borrowers, and those contracts are subject to Oracle 
+      published price feeds subject to MPA Issuer permission. One becomes an MPA Holder 
+      through buying the MPA from a Borrower.
+      
+      The power of Issuer can be transferred to another user. All control of the Asset 
+      Permissions moves with the power of Issuer.
 
 * User Issued Asset (UIA) Options:
 
@@ -36,8 +47,8 @@ The following parameters can be changed after creation:
     * Short Backing Asset 
     * Retain Power to Force Global Settlement
     * Margin Call Fee Ratio
-    * Whitelist feed producer oracles
-    * Whitelist Committee and Witnesses as oracles
+    * Whitelist feed producer Oracles
+    * Whitelist Committee and Witnesses as Oracles
     
 * MPA Feed Producers Options:
 
@@ -58,11 +69,11 @@ There is also more information about each option in the FAQ's below:
 
 .. _asset-faq2:
 
-Can I change the issuer?
+How do I transfer ownership to a new Issuer?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The current issuer of an asset may transfer issuance of the asset to
-someone else by changing the issuer in the asset's settings.  
+The current control of an asset may transfer control of the asset to
+someone else by changing the generic `issuer` in the asset's settings.  
 
 .. _asset-faq3:
 
@@ -74,8 +85,8 @@ the name of the symbol, e.g.:
 
     PARENT.child
 
-The parent asset issuer owns the child namespace and can create any 
-PARENT.xxx.  Such child assets can only be created by the issuer of 
+The parent asset controller owns the child namespace and can create any 
+PARENT.xxx.  Such child assets can only be created by the controller of 
 ``PARENT``. Both PARENT and child assets can be both MPA's or UIA's. 
 
 .. _asset-faq4:
@@ -88,7 +99,7 @@ From the other 50%, 20% go to the network and 80% go to the referral
 program. This means, that if you are a life-time member, you get back
 40% of the asset creation fee after the vesting period (currently 90
 days).  An additional 40% would be in the fee pool owned and to be claimed
-at will by the issuer. 
+at will by the creator. 
 
 ---------
 
@@ -106,7 +117,7 @@ order is canceled, 90% of the fee will be returned as BTS. The result
 is, that if the core exchange rate is lower than the highest bid, people
 can simply buy your token from the market, and exchange them implicitly
 with the fee pool by creating and canceling an order. This will deplete
-the fee pool and leave the issuer with his tokens at a slight loss
+the fee pool and leave the Issuer with his tokens at a slight loss
 (depending on the offset of the core exchange rate). For this reason, we
 recommend to use a core exchange that is slightly higher than the market
 price of your asset. As a consequence, paying fees in BTS should always
