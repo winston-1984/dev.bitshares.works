@@ -74,9 +74,9 @@ the name of the symbol, e.g.:
 
     PARENT.child
 
-The asset issuer owns the child namespace and can issue any PARENT.xxx.
-Such child assets can only be created by the issuer of ``PARENT``.
-Both PARENT and child assets can be both MPA's or UIA's. 
+The parent asset issuer owns the child namespace and can create any 
+PARENT.xxx.  Such child assets can only be created by the issuer of 
+``PARENT``. Both PARENT and child assets can be both MPA's or UIA's. 
 
 .. _asset-faq4:
 
@@ -319,6 +319,8 @@ Yes! However, MPA's introduce many additional issuer options.
 What are market-pegged-asset-specific parameters?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+MPA specific parameters are per-asset parameters, which include:
+
 * ``feed_lifetime_sec``:
     The lifetime of a feed.  After this time (in seconds) a feed is no
     longer considered *valid*.  The final feed price is the median 
@@ -332,52 +334,59 @@ What are market-pegged-asset-specific parameters?
     * ``delay seconds``:
         The delay between requesting a settlement and actual execution of
         settlement (in seconds).
-    * ``Force Settlment Offset (FSO)``:   `100% = 10000 graphene`
-        Percentage offset from the price feed for settlement favoring the borrower. 
     * ``maximum volume``:   `100% = 10000 graphene`
         Maximum percentage of the asset supply that can be settled daily 
-    * ``Force Settlement Fee Percentage(FSFP)``:
-        FSFP for each smartcoin is controlled by the smartcoin owner. When a force 
-        settlement is executed, the buyer sells smartcoin with quantity X and gets 
-        collateral in quantity:
+    * ``Force Settlment Offset (FSO)``:   `100% = 10000 graphene`
+        Percentage offset from the price feed for settlement favoring the borrower. 
+    * ``Force Settlement Fee Percentage (FSFP)``:
+   
+        FSFP is set by the smartcoin issuer and provides a revenue stream for 
+        the smartcoin issuer.  When a force-settlement order is executed by 
+        a smartcoin owner, he sells:  
+            
+            `smartcoin quantity X`
+        
+        and in return receives (executes right to buy) collateral in the amount:
+        
+           `X * (1 - FSO) * (1 - FSFP) / feed_price` 
          
-           `X*(1-FSO)*(1-FSFP)/feed_price` 
+        The borrower (settled debt position owner) is complelled to buy:
          
-         The settled debt position owner gets quantity X smartcoin.
+            `smartcoin quantity X`
          
-         The settled debt position owner sells collateral in quantity: 
+        The as the borrower is compelled to sell collateral in quantity: 
          
-           `X*(1-FSO)/feed_price` 
+           `X * (1 - FSO) / feed_price` 
          
-         The delta between paid and received collateral in quantity: 
+        The delta between paid and received collateral in quantity: 
          
-           `X*FSFP*(1-FSO)/feed_price` 
+           `X * FSFP * (1 - FSO) / feed_price` 
          
-         will be paid to the owner of the smartcoin as force settlement fee.
+        is paid to the smartcoin issuer as Force Settlement Fee.
 
-In this scenario, as a price offset parameter, FSO is irrelevant to fee charging, it just define force settlement price = feed price/(1-FSO). and the force settlement fee is paid in collateral and the amount is calculated out based on force settlement price and FSFP.
 --------- 
-* ``allow asset owner to force global settlement``:
+* ``allow asset owner to force global settlement``: 
     This permission effectively allows the issuer to margin call every 
     borrower.  Even if this Permission is renounced, the same power can be had
     through publishing a high maintenance collateral ratio or erroneous price.  
     If this flag has been enabled, no further shares can be borrowed!
-* ``short backing asset``:
+* ``short backing asset``: 
     The asset that must be used as collateral to *back* this asset (when borrowing).
     NOTE: This setting can only be established once when creating the asset.
-* ``margin call fee ratio(MCFR)``:
+* ``margin call fee ratio(MCFR)``: 
     The issuer may declare a MCFR to collect a fee from margin calls of his asset. 
     Margin call order price limit is: `settlement_price / ( MSSR - MCFR )`
     Upon settlement of a margin call, the issuer collects: 
     `( amount_settled * MCFR ) / settlement_price` 
-* ``whitelist feed producers``:
+    
+* ``whitelist feed producers``: 
     The asset issuer must manually whitelist feed producers in a list by user_id.
     These feed producers are the oracles which gather data and upload it to the blockchain.
     The feed producer's median price is used in all margin contracts for smartcoin.
-* ``allow witness or committee to feed``:
+* ``allow witness or committee to feed``: (per-asset parameter)
     In addition to manually whitelisted producers the issuer may choose to 
     allow all witnesses or all committe members, each as a group, to be feed producers.   
-* ``Feed Producers``:
+* ``Feed Producers``: 
     Feed producers are chosen by the issuer in list format by 1.2.x user_id.  
     The feed producer publishes 4 rates to the blockchain for each MPA (price and 3 
     coefficients: CER, MSSR, and MCR), the element wise median of these price feeds 
