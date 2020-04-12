@@ -54,14 +54,14 @@ The following parameters can be changed after creation:
 
 
 A guide can be found :ref:`here <uia-update-manual>`.
-There is also more informationa about each option in the FAQ's below:
+There is also more information about each option in the FAQ's below:
 
 .. _asset-faq2:
 
 Can I change the issuer?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The current owner of an asset may transfer ownership of the asset to
+The current issuer of an asset may transfer issuance of the asset to
 someone else by changing the issuer in the asset's settings.  
 
 .. _asset-faq3:
@@ -134,7 +134,7 @@ fees can be payed in the native UIA instead of BTS.
              and drain your fee pool via implicit abitrage.
 
 It is the task of the issuer to keep the fee pool funded and the core
-exchange rate updated unless he wants the owner of his asset to be
+exchange rate updated unless he wants the holder of his asset to be
 required to hold BTS for the fee.
 
 .. _asset-faq7:
@@ -258,13 +258,13 @@ In BitShares, you pay a fee upon **receiving an asset**.
 
 **Scenario:**
 
-bob, owner of `bob_UIA` sets:
+bob, issuer of `bob_UIA` sets:
 
     * Maker fee for `bob_UIA` market at 0.1%
     
     * Taker fee for `bob_UIA` market at 0.2%
     
-alice, owner of `alice_UIA` sets:
+alice, issuer of `alice_UIA` sets:
 
     * Maker fee for `alice_UIA` market at 0.3%
     
@@ -329,7 +329,7 @@ MPA specific parameters are per-asset parameters, which include:
     The number of feeds required for a market to become (and stay) active.
 * ``force settling``:
     * ``disable``:
-        An asset issuer may choose to disallow an asset owner from having the power 
+        An asset issuer may choose to disallow an asset holder from having the power 
         to compel an asset borrower to settle a margin position at feed price.
     * ``delay seconds``:
         The delay between requesting a settlement and actual execution of
@@ -341,8 +341,8 @@ MPA specific parameters are per-asset parameters, which include:
     * ``Force Settlement Fee Percentage (FSFP)``:
    
         FSFP is set by the smartcoin issuer and provides a revenue stream for 
-        the smartcoin issuer.  When a force-settlement order is executed by 
-        a smartcoin owner, he sells:  
+        the asset issuer.  When a force-settlement order is executed by 
+        an asset holder, he sells:  
             
             `smartcoin quantity X`
         
@@ -350,11 +350,11 @@ MPA specific parameters are per-asset parameters, which include:
         
            `X * (1 - FSO) * (1 - FSFP) / feed_price` 
          
-        The borrower (settled debt position owner) is complelled to buy:
+        The settled debt position's borrower is complelled to buy:
          
             `smartcoin quantity X`
          
-        The as the borrower is compelled to sell collateral in quantity: 
+        The the borrower is compelled to provide (sell) collateral in quantity: 
          
            `X * (1 - FSO) / feed_price` 
          
@@ -365,7 +365,7 @@ MPA specific parameters are per-asset parameters, which include:
         is paid to the smartcoin issuer as Force Settlement Fee.
 
 --------- 
-* ``allow asset owner to force global settlement``: 
+* ``allow asset issuer to force global settlement``: 
     This permission effectively allows the issuer to margin call every 
     borrower.  Even if this Permission is renounced, the same power can be had
     through publishing a high maintenance collateral ratio or erroneous price.  
@@ -378,11 +378,10 @@ MPA specific parameters are per-asset parameters, which include:
     Margin call order price limit is: `settlement_price / ( MSSR - MCFR )`
     Upon settlement of a margin call, the issuer collects: 
     `( amount_settled * MCFR ) / settlement_price` 
-    
 * ``whitelist feed producers``: 
     The asset issuer must manually whitelist feed producers in a list by user_id.
     These feed producers are the oracles which gather data and upload it to the blockchain.
-    The feed producer's median price is used in all margin contracts for smartcoin.
+    The feed producer's median price is used in all smartcoin margin contracts.
 * ``allow witness or committee to feed``: (per-asset parameter)
     In addition to manually whitelisted producers the issuer may choose to 
     allow all witnesses or all committe members, each as a group, to be feed producers.   
