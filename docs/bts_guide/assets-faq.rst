@@ -295,12 +295,13 @@ daniel, fills charlie's order by selling `bob_UIA` to `receive alice_UIA`.
 Sharing Market Fees with the Network
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-After Hard Fork BSIP86 a percent of UIA and MPA issuer's Market Fees can be
-taxed by the BitShares Committee and used to fund the committee controlled account.  
-At HF BSIP86 the maximum `market_fee_network_percent` (MFNP) was hard coded to 30% 
-of the market fee. The default MFNP fee was set to zero. The committee holds the right 
-to adjust the MFNP in range from 0 to 30, as they deem fit, to fund development.  
-The MFNP applies to all UIA's and MPA's equally. 
+After Hard Fork BSIP86 a percent of UIA and MPA issuer's Market Fees is itself
+subject to a fee by the BitShares Committee.  These funds go to the committee 
+controlled account's vesting balances. At HF BSIP86 the maximum 
+`market_fee_network_percent` (MFNP) was hard coded to 30% of the market fee. 
+The default MFNP fee was set to zero. The committee holds the right to adjust 
+the MFNP in range from 0 to 30, as they deem fit, to fund development.  The 
+MFNP applies to all UIA's and MPA's equally. 
 
 ---------  
    
