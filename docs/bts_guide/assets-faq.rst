@@ -54,6 +54,7 @@ The following parameters can be changed after creation:
 
 
 A guide can be found :ref:`here <uia-update-manual>`.
+There is also more informationa about each option in the FAQ's below:
 
 .. _asset-faq2:
 
@@ -216,6 +217,9 @@ The percentage of market fees that are applied can be defined and
 changed by the issuer.  The issuer may charge a different fee depending on 
 if the user is a Maker or Taker.
 
+What is a Maker and a Taker?
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 A "Maker" adds a limit order onto the orderbooks by making an offer
 
 A "Taker" is one who removes a Maker's order from the orderbooks by filling it
@@ -247,7 +251,7 @@ translation to traditional percent format.
 
 .. _asset-faq13:
 
-How are market fees accounted in a trade?
+What happens when assets have different fees?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In BitShares, you pay a fee upon **receiving an asset**,  suppose:
@@ -274,6 +278,17 @@ daniel, fills charlie's order by selling `bob_UIA` to `receive alice_UIA`.
   * daniel receives `alice_UIA`
     * daniel pays alice 0.4% Taker Fee
 
+
+Sharing Market Fees with the Network
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+After Hard Fork BSIP86 a percent of UIA and MPA issuer's Market Fees can be
+taxed by the BitShares Committee and used to fund the committee controlled account.  
+At HF BSIP86 the maximum `market_fee_network_percent` (MFNP) was hard coded to 30% 
+of the market fee. The default MFNP fee was set to zero. The committee holds the right 
+to adjust the MFNP in range from 0 to 30, as they deem fit, to fund development.  
+The MFNP applies to all UIA's and MPA's equally. 
+
 ---------  
    
 Market Pegged Assets
@@ -284,7 +299,7 @@ Market Pegged Assets
 Can I use the same flags/permissions as for UIAs?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Yes! However MPA's introduce many additional issuer options. 
+Yes! However, MPA's introduce many additional issuer options. 
 
 .. _asset-faq15:
 
@@ -314,12 +329,13 @@ What are market-pegged-asset-specific parameters?
     through publishing a high maintenance collateral ratio or erroneous price.  
     If this flag has been enabled, no further shares can be borrowed!
 * ``short backing asset``:
-    The asset that must be used as collateral to *back* this asset (when borrowing)
+    The asset that must be used as collateral to *back* this asset (when borrowing).
+    NOTE: This setting can only be established once when creating the asset.
 * ``margin call fee ratio(MCFR)``:
     The issuer may declare a MCFR to collect a fee from margin calls of his asset. 
     Margin call order price limit is: `settlement_price / ( MSSR - MCFR )`
-Upon settlement of a margin call, the issuer collects: 
-`( amount_settled * MCFR ) / settlement_price` 
+    Upon settlement of a margin call, the issuer collects: 
+    `( amount_settled * MCFR ) / settlement_price` 
 * ``whitelist feed producers``:
     The asset issuer must manually whitelist feed producers in a list by user_id.
     These feed producers are the oracles which gather data and upload it to the blockchain.
@@ -329,8 +345,9 @@ Upon settlement of a margin call, the issuer collects:
     allow all witnesses or all committe members, each as a group, to be feed producers.   
 * ``Feed Producers``:
     Feed producers are chosen by the issuer in list format by 1.2.x user_id.  
-    The feed producer publishes 4 rates to the blockchain for each MPA, the median of 
-    these price feeds is the oracle which enforces the outcome of margin loans: 
+    The feed producer publishes 4 rates to the blockchain for each MPA (price and 3 
+    coefficients: CER, MSSR, and MCR), the element wise median of these price feeds 
+    is the oracle which enforces the outcome of margin loans: 
     * ``price feed (FEED)``:
         Each feed producer, assigned by the asset issuer, may publish a price feed.  The 
         feed represents the price of the MPA, relative to its short backing asset.  Each
