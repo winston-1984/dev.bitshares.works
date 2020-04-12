@@ -260,25 +260,29 @@ In BitShares, you pay a fee upon **receiving an asset**.
 
 bob, owner of `bob_UIA` sets:
 
-    Maker fee for `bob_UIA` market at 0.1%
-    Taker fee for `bob_UIA` market at 0.2%
+    * Maker fee for `bob_UIA` market at 0.1%
+    
+    * Taker fee for `bob_UIA` market at 0.2%
     
 alice, owner of `alice_UIA` sets:
 
-    Maker fee for `alice_UIA` market at 0.3%
-    Taker fee for `alice_UIA` market at 0.4%
+    * Maker fee for `alice_UIA` market at 0.3%
+    
+    * Taker fee for `alice_UIA` market at 0.4%
 
 charlie places a limit order to buy `bob_UIA` with `alice_UIA` onto the book.
 
 daniel, fills charlie's order by selling `bob_UIA` to `receive alice_UIA`.
 
-**Outcome:**
+**charlie and bob's outcome:**
 
   * charlie is a `bob_UIA:alice_UIA` market Maker
   
   * charlie receives `bob_UIA`
   
     * charlie pays bob 0.1% Maker Fee
+    
+**daniel and alice's outcome:**
 
   * daniel is a Taker in the `bob_UIA:alice_UIA` market
   
@@ -286,6 +290,7 @@ daniel, fills charlie's order by selling `bob_UIA` to `receive alice_UIA`.
   
     * daniel pays alice 0.4% Taker Fee
 
+**daniel owes no fee to bob and charlie owes no fee to alice**
 
 Sharing Market Fees with the Network
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
