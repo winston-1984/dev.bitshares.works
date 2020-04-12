@@ -361,6 +361,7 @@ What are market-pegged-asset-specific parameters?
     The feed producer publishes 4 rates to the blockchain for each MPA (price and 3 
     coefficients: CER, MSSR, and MCR), the element wise median of these price feeds 
     is the oracle which enforces the outcome of margin loans: 
+    
     * ``price feed (FEED)``:
         Each feed producer, assigned by the asset issuer, may publish a price feed.  The 
         feed represents the price of the MPA, relative to its short backing asset.  Each
