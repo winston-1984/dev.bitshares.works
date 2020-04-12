@@ -73,7 +73,7 @@ How do I transfer ownership to a new Issuer?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The current control of an asset may transfer control of the asset to
-someone else by changing the generic `issuer` in the asset's settings.  
+someone else by changing the `issuer` in the asset's settings.  
 
 .. _asset-faq3:
 
