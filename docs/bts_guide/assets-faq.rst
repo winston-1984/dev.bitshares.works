@@ -309,16 +309,16 @@ What are market-pegged-asset-specific parameters?
     The number of feeds required for a market to become (and stay) active.
 * ``force settling``:
 
-* ``disable``:
-    An asset issuer may choose to disallow an asset owner from having the power 
-    to compel an asset borrower to settle a margin position at feed price.
-* ``delay seconds``:
-    The delay between requesting a settlement and actual execution of
-    settlement (in seconds).
-* ``percent offset``:   `100% = 10000 graphene`
-    Percentage offset from the price feed for settlement favoring the borrower. 
-* ``maximum volume``:   `100% = 10000 graphene`
-    Maximum percentage of the asset supply that can be settled daily 
+    * ``disable``:
+        An asset issuer may choose to disallow an asset owner from having the power 
+        to compel an asset borrower to settle a margin position at feed price.
+    * ``delay seconds``:
+        The delay between requesting a settlement and actual execution of
+        settlement (in seconds).
+    * ``percent offset``:   `100% = 10000 graphene`
+        Percentage offset from the price feed for settlement favoring the borrower. 
+    * ``maximum volume``:   `100% = 10000 graphene`
+        Maximum percentage of the asset supply that can be settled daily 
 * ``allow asset owner to force global settlement``:
     This permission effectively allows the issuer to margin call every 
     borrower.  Even if this Permission is renounced, the same power can be had
