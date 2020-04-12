@@ -302,8 +302,7 @@ controlled account's vesting balances. At HF BSIP86 the maximum
 The default MFNP fee was set to zero. The committee holds the right to adjust 
 the MFNP in range from 0 to 30, as they deem fit, to fund development.  The 
 MFNP applies to all UIA's and MPA's Market Fees equally. 
-
----------  
+ 
    
 Market Pegged Assets
 ------------------------
@@ -333,10 +332,31 @@ What are market-pegged-asset-specific parameters?
     * ``delay seconds``:
         The delay between requesting a settlement and actual execution of
         settlement (in seconds).
-    * ``percent offset``:   `100% = 10000 graphene`
+    * ``Force Settlment Offset (FSO)``:   `100% = 10000 graphene`
         Percentage offset from the price feed for settlement favoring the borrower. 
     * ``maximum volume``:   `100% = 10000 graphene`
         Maximum percentage of the asset supply that can be settled daily 
+    * ``Force Settlement Fee Percentage(FSFP)``:
+        FSFP for each smartcoin is controlled by the smartcoin owner. When a force 
+        settlement is executed, the buyer sells smartcoin with quantity X and gets 
+        collateral in quantity:
+         
+           `X*(1-FSO)*(1-FSFP)/feed_price` 
+         
+         The settled debt position owner gets quantity X smartcoin.
+         
+         The settled debt position owner sells collateral in quantity: 
+         
+           `X*(1-FSO)/feed_price` 
+         
+         The delta between paid and received collateral in quantity: 
+         
+           `X*FSFP*(1-FSO)/feed_price` 
+         
+         will be paid to the owner of the smartcoin as force settlement fee.
+
+In this scenario, as a price offset parameter, FSO is irrelevant to fee charging, it just define force settlement price = feed price/(1-FSO). and the force settlement fee is paid in collateral and the amount is calculated out based on force settlement price and FSFP.
+--------- 
 * ``allow asset owner to force global settlement``:
     This permission effectively allows the issuer to margin call every 
     borrower.  Even if this Permission is renounced, the same power can be had
