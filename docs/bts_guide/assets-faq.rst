@@ -16,18 +16,9 @@ The following parameters can be changed after creation:
 
 * Issuer
      
-      There is one Issuer for each UIA or MPA, which controls access to the asset
-      permissions. The UIA Issuer owns the fee revenue of the UIA asset and the sole power to issue
-      new UIA Assets to UIA Holders.
-      
-      The MPA Issuer owns the fee revenue of the MPA.  However, unlike a UIA Issuer, 
-      the MPA Issuer cannot issue shares of MPA's.  MPA's must be borrowed into existance 
-      through call orders, by MPA Borrowers, and those contracts are subject to Oracle 
-      published price feeds subject to MPA Issuer permission. One becomes an MPA Holder 
-      through buying the MPA from a Borrower.
-      
-      The power of Issuer can be transferred to another user. All control of the Asset 
-      Permissions moves with the power of Issuer.
+      At core level, there is one `issuer` for each UIA or MPA, which controls access 
+      to the asset permissions. As the MPA `issuer` cannot actually issue shares, they are
+      referred to in this document as the MPA Admin.
 
 * User Issued Asset (UIA) Options:
 
@@ -64,6 +55,79 @@ The following parameters can be changed after creation:
     * (MPA) Short Backing Asset 
 
 
+
+
+What actors are relevent to Assets?
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+The Graphene Asset `issuer` Actor:
+
+At the core level, there is only one `issuer` and it is the creator and current principal of a UIA or MPA. 
+
+When we speak about the `issuer` it is more comfortable to speak in terms of what powers the issuer weilds:
+
+    Asset Creator
+
+      At the time of Asset creation, certain duties are given to the Creator such as 
+      assigning the maximum coins in supply.  This applies to both UIA and MPA Assets.
+
+    Asset Principal
+
+      After the Asset creation, there are various settings under control of 
+      the Asset Principal. Additionally, the asset principal collects all asset fees.  
+      Also, assigning the Principal to another user transfers all other `issuer` rights.  
+      Principals can be dividided in two categories; UIA Issuers and MPA admins. 
+
+        UIA Issuer
+
+          A UIA Principal is called the UIA Issuer, because he has the authority 
+          to issue UIA's to UIA Holders.   
+
+            UIA Gateway 
+             
+              Some UIA Issuers offer 1:1 backing of a UIA for a coins on another blockchain 
+              such as Bitcoin, fiat currency, or other money, these issuers are UIA Gateways.
+
+        MPA Admin
+
+          MPA's cannot be issued to Holders by the Principal.  Therefore, the Principal of an 
+          MPA is an "Administrator" who assigns and incentivizes the Price Feed publisher Oracles.  
+          The MPA Admin also has control over the same UIA settings as a UIA Issuer, as well 
+          as additional MPA specific settings. 
+
+            
+
+Other non-issuer Actors:
+
+    UIA Holder
+
+      A UIA holder has either purchased the UIA from another Holder or has been 
+      issued the Asset by the UIA Issuer.  The Holder has UIA transfer rights.
+      If the UIA was issued by a Gateway, the Holder may have Gateway priviledges 
+      to swap UIA's for off chain cold storage assets, subject to availability. 
+
+    MPA Borrower
+
+      The MPA Borrower is in effect the MPA Issuer and assumes transfer rights upon issuance.
+      The Borrower enters a call position to issue an MPA to himself, in exchange for signing 
+      a smart contract, which he backs by locking collateral under the required call order terms.
+      The Borrower's collateral value is subject to the price published by Oracles.  Failure 
+      to maintain adequate collateral amount, results in forfeiture of the Borrower's collateral
+      under margin call.  The Borrower is also subject to Force Settlment by MPA Holders and Global 
+      Settlement both directly by the MPA Admin and the call contract terms.
+
+    MPA Holder
+
+      The Holder has purchased the MPA from a Borrower or another Holder.  Like the Borrower,
+      the Holder has MPA transfer rights.  Additionally, the Holder has MPA settlement rights. 
+
+    MPA Oracle
+
+      The Oracle is the Price Feed publisher for the MPA smart contract's terms.   The MPA Admin
+      may assign mulitple Oracles and the blockchain considers the median of their Price Feeds 
+      when evaluating call contracts.  It is the Oracle's job to collect real world 
+      prices and publish them to the blockchain periodically.
+
+
 A guide can be found :ref:`here <uia-update-manual>`.
 There is also more information about each option in the FAQ's below:
 
@@ -72,7 +136,7 @@ There is also more information about each option in the FAQ's below:
 How do I transfer ownership to a new Issuer?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The current control of an asset may transfer control of the asset to
+The current Asset Principal of an asset may transfer control of the asset to
 someone else by changing the `issuer` in the asset's settings.  
 
 .. _asset-faq3:
@@ -269,13 +333,13 @@ In BitShares, you pay a fee upon **receiving an asset**.
 
 **Scenario:**
 
-bob, issuer of `bob_UIA` sets:
+bob, Issuer of `bob_UIA` sets:
 
     * Maker fee for `bob_UIA` market at 0.1%
     
     * Taker fee for `bob_UIA` market at 0.2%
     
-alice, issuer of `alice_UIA` sets:
+alice, Issuer of `alice_UIA` sets:
 
     * Maker fee for `alice_UIA` market at 0.3%
     
@@ -306,7 +370,7 @@ daniel, fills charlie's order by selling `bob_UIA` to `receive alice_UIA`.
 Sharing Market Fees with the Committee
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-After Hard Fork BSIP86 a percent of UIA and MPA issuer's Market Fees is itself
+After Hard Fork BSIP86 a percent of UIA Issuer's and MPA Admins's Market Fees is itself
 subject to a fee by the BitShares Committee.  These funds go to the committee 
 controlled account's vesting balances. At HF BSIP86 the maximum 
 `market_fee_network_percent` (MFNP) was hard coded to 30% of the market fee. 
@@ -323,7 +387,7 @@ Market Pegged Assets
 Can I use the same flags/permissions as for UIAs?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Yes! However, MPA's introduce many additional issuer options. 
+Yes! However, MPA's introduce many additional Admin options. 
 
 .. _asset-faq15:
 
@@ -340,8 +404,8 @@ MPA specific parameters are per-asset parameters, which include:
     The number of feeds required for a market to become (and stay) active.
 * ``force settling``:
     * ``disable``:
-        An asset issuer may choose to disallow an asset holder from having the power 
-        to compel an asset borrower to settle a margin position at feed price.
+        An MPA Admin may choose to disallow an asset holder from having the power 
+        to compel an MPA Borrower to settle a margin position at feed price.
     * ``delay seconds``:
         The delay between requesting a settlement and actual execution of
         settlement (in seconds).
@@ -351,11 +415,11 @@ MPA specific parameters are per-asset parameters, which include:
         Percentage offset from the price feed for settlement favoring the borrower. 
     * ``Force Settlement Fee Percentage (FSFP)``:
    
-        FSFP is set by the smartcoin issuer and provides a revenue stream for 
-        the asset issuer.  When a force-settlement order is executed by 
-        an asset holder, he sells:  
+        FSFP is set by the MPA Admin and provides a revenue stream for 
+        the Admin.  When a force-settlement order is executed by 
+        an Asset Holder, he sells:  
             
-            `smartcoin quantity X`
+            `MPA quantity X`
         
         and in return receives (executes right to buy) collateral in the amount:
         
@@ -363,7 +427,7 @@ MPA specific parameters are per-asset parameters, which include:
          
         The settled debt position's borrower is complelled to buy:
          
-            `smartcoin quantity X`
+            `MPA quantity X`
          
         The the borrower is compelled to provide (sell) collateral in quantity: 
          
@@ -373,10 +437,10 @@ MPA specific parameters are per-asset parameters, which include:
          
            `X * FSFP * (1 - FSO) / feed_price` 
          
-        is paid to the smartcoin issuer as Force Settlement Fee.
+        is paid to the MPA Admin as Force Settlement Fee.
 
 --------- 
-* ``allow asset issuer to force global settlement``: 
+* ``allow MPA Admin to force global settlement``: 
     This permission effectively allows the issuer to margin call every 
     borrower.  Even if this Permission is renounced, the same power can be had
     through publishing a high maintenance collateral ratio or erroneous price.  
@@ -385,25 +449,25 @@ MPA specific parameters are per-asset parameters, which include:
     The asset that must be used as collateral to *back* this asset (when borrowing).
     NOTE: This setting can only be established once when creating the asset.
 * ``margin call fee ratio(MCFR)``: 
-    The issuer may declare a MCFR to collect a fee from margin calls of his asset. 
+    The MPA Admin may declare a MCFR to collect a fee from margin calls of his asset. 
     Margin call order price limit is: `settlement_price / ( MSSR - MCFR )`
     Upon settlement of a margin call, the issuer collects: 
     `( amount_settled * MCFR ) / settlement_price` 
 * ``whitelist feed producers``: 
-    The asset issuer must manually whitelist feed producers in a list by user_id.
+    The MPA Admin must manually whitelist feed producers in a list by user_id.
     These feed producers are the oracles which gather data and upload it to the blockchain.
-    The feed producer's median price is used in all smartcoin margin contracts.
+    The feed producer's median price is used in all MPA smartcoin margin contracts.
 * ``allow witness or committee to feed``: (per-asset parameter)
-    In addition to manually whitelisted producers the issuer may choose to 
+    In addition to manually whitelisted producers the MPA Admin may choose to 
     allow all witnesses or all committe members, each as a group, to be feed producers.   
 * ``Feed Producers``: 
-    Feed producers are chosen by the issuer in list format by 1.2.x user_id.  
+    Feed producers are chosen by the MPA Admin in list format by 1.2.x user_id.  
     The feed producer publishes 4 rates to the blockchain for each MPA (price and 3 
     coefficients: CER, MSSR, and MCR), the element wise median of these price feeds 
     is the oracle which enforces the outcome of margin loans: 
     
     * ``price feed (FEED)``:
-        Each feed producer, assigned by the asset issuer, may publish a price feed.  The 
+        Each feed producer, assigned by the MPA Admin, may publish a price feed.  The 
         feed represents the price of the MPA, relative to its short backing asset.  Each
         feed producer is tasked with gathering real world market data, normalizing it, 
         in some instances applying a cross rate, and then regularly uploading it to 
